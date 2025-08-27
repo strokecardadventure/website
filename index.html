@@ -1,0 +1,45 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#e11d48">
+<link rel="icon" href="assets/icons/pwa-192.png">
+<link rel="stylesheet" href="css/global.css?v=10"><title>Login · SCA</title></head>
+<body>
+<header class="header"><div></div><h1 class="title">Stroke Card Adventure</h1><div></div></header>
+<main class="content">
+  <div class="tile title-tile">Name Game</div>
+  <div class="tile muted">Background</div>
+  <form id="loginForm" class="tile" style="max-width:520px; margin:0 auto; width:100%">
+    <input id="lemail" type="email" placeholder="Email"><br>
+    <input id="lpass" type="password" placeholder="Password"><br>
+    <button class="btn primary" type="submit">Login</button>
+  </form>
+  <div class="tile" style="max-width:520px; margin:0 auto; width:100%">
+    <div>First time?</div><br>
+    <form id="regForm">
+      <input id="remail" type="email" placeholder="New email"><br>
+      <input id="rpass" type="password" placeholder="New password (≥6)"><br>
+      <button class="btn" type="submit">Create account</button>
+    </form>
+  </div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+<script src="js/firebase.js"></script><script src="js/ui.js"></script><script src="js/cards.js"></script>
+<script>
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js'); }
+auth.onAuthStateChanged(u=>{ if(u) location.href='play.html'; });
+
+loginForm.onsubmit = async (e)=>{
+  e.preventDefault();
+  await auth.signInWithEmailAndPassword(lemail.value.trim(), lpass.value.trim());
+  await ensureUserDoc(auth.currentUser); await unlockFromQueryIfAny(); location.href='play.html';
+};
+regForm.onsubmit = async (e)=>{
+  e.preventDefault();
+  await auth.createUserWithEmailAndPassword(remail.value.trim(), rpass.value.trim());
+  await ensureUserDoc(auth.currentUser); await unlockFromQueryIfAny(); location.href='play.html';
+};
+</script>
+</body></html>
