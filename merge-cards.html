@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#e11d48">
+<link rel="icon" href="assets/icons/pwa-192.png">
+<link rel="stylesheet" href="css/global.css?v=10"><title>Merge</title></head>
+<body>
+<header class="header"><a class="icon-btn" href="my-cards.html">←</a><h1 class="title">Merge card</h1><span class="icon-btn">➕</span></header>
+<main id="app" class="content"></main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+<script src="js/firebase.js"></script><script src="js/ui.js"></script><script src="js/cards.js"></script>
+<script>
+requireAuth().then(async ()=>{
+  const u = await getUserDoc(); const have=new Set(u.unlocked||[]);
+  const bases = [...new Set([...have].map(id=>baseOf(id)))];
+  let out = `<div class="tile title-tile">Merge</div>
+             <div class="muted">≥24 hr · New skill & stat (result: -M)</div>`;
+  out += `<div class="grid">`+bases.map(b=>`<button class="btn" onclick="startJob('merge','${b}').then(()=>location.reload())">${findCard(b).name}</button>`).join('')+`</div>`;
+  // jobs list
+  const jobs = await userRef().collection('jobs').get();
+  out += `<div class="tile title-tile">Jobs</div>`;
+  out += jobs.docs.map(d=>{
+    const j=d.data(), started=j.startedAt?.toDate()?.getTime()||0, end=started+(j.hours||24)*3600*1000;
+    const left=Math.max(0, end-Date.now()); const h=Math.ceil(left/3600000);
+    return `<div class="tile">${j.type} ${j.baseId} → ${j.resultId} · ${j.status}${j.status==='running'?` · ~${h}h left`:''}
+      ${j.status==='running'?'':`<button class="btn" onclick="claimReadyJobs().then(()=>location.reload())">Claim</button>`}</div>`;
+  }).join('') || `<div class="tile">No jobs yet.</div>`;
+  app.innerHTML = out;
+});
+</script>
+</body></html>
