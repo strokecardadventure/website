@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#e11d48">
+<link rel="icon" href="assets/icons/pwa-192.png">
+<link rel="stylesheet" href="css/global.css?v=10"><title>My character</title></head>
+<body>
+<header class="header"><a class="icon-btn" href="my-cards.html">←</a><h1 class="title">My character</h1><span class="icon-btn">🧙</span></header>
+<main id="app" class="content"><div class="tile">Loading…</div></main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+<script src="js/firebase.js"></script><script src="js/ui.js"></script><script src="js/cards.js"></script>
+<script>
+requireAuth().then(async ()=>{
+  const u = await getUserDoc();
+  const unlocked = u.unlocked||[];
+  const html = unlocked.map(id=>{
+    const s = cardStatsWithUser(id,u), base = findCard(id);
+    return `<div class="tile" style="text-align:left">
+      <div><strong>${base.name}${id.endsWith('-M')?' · Merged':''}${id.endsWith('-X')?' · Mutated':''}</strong> <small>(${base.group})</small></div>
+      <div class="muted">Skill: ${base.skill}</div>
+      <div class="muted">HP ${s.hp} · ATK ${s.atk} · DEF ${s.def}</div>
+    </div>`;
+  }).join('') || `<div class="tile">No cards yet. Scan a QR or open a deep-link.</div>`;
+  app.innerHTML = `<div class="tile title-tile">Card unlock</div>${html}`;
+});
+</script>
+</body></html>
