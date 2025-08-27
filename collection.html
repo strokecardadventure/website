@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#e11d48">
+<link rel="icon" href="assets/icons/pwa-192.png">
+<link rel="stylesheet" href="css/global.css?v=10"><title>Collection</title></head>
+<body>
+<header class="header"><a class="icon-btn" href="my-cards.html">←</a><h1 class="title">Collection</h1><span class="icon-btn">🗂️</span></header>
+<main id="app" class="content"></main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+<script src="js/firebase.js"></script><script src="js/ui.js"></script><script src="js/cards.js"></script>
+<script>
+requireAuth().then(async ()=>{
+  const u = await getUserDoc(); const have = new Set(u.unlocked||[]);
+  const groups = ['HIDLENS','BEFAST','Life'];
+  let out='';
+  for (const g of groups){
+    out += `<div class="tile title-tile">${g}</div><div class="grid">` +
+      CARDS.filter(c=>c.group===g).map(c=>{
+        const ok = [...have].some(id=>baseOf(id)===c.id);
+        return `<div class="tile">${ok?'✅':'🔒'} ${c.name}</div>`;
+      }).join('') + `</div>`;
+  }
+  app.innerHTML = out;
+});
+</script>
+</body></html>
