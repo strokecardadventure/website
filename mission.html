@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#e11d48">
+<link rel="icon" href="assets/icons/pwa-192.png">
+<link rel="stylesheet" href="css/global.css?v=10"><title>Mission</title></head>
+<body>
+<header class="header"><button class="icon-btn" onclick="toggleSidebar()">☰</button><h1 class="title">Mission</h1><a class="icon-btn" href="leaderboard.html">🏆</a></header>
+<aside class="sidebar"><div class="brand"><img src="assets/icons/pwa-192.png"><strong>Stroke Card Adventure</strong></div>
+  <nav class="menu">
+    <a id="m-play" href="play.html">Play</a>
+    <a id="m-cards" href="my-cards.html">My cards</a>
+    <a id="m-mission" class="active" href="mission.html">Mission</a>
+    <a id="m-gacha" href="gacha.html">Gacha</a>
+    <a id="m-profile" href="profile.html">Profile</a>
+    <a id="m-comment" href="comment.html">Comment</a>
+  </nav><button class="btn" onclick="logout()">Logout</button></aside>
+<div class="backdrop" onclick="toggleSidebar()"></div>
+
+<main class="content">
+  <a class="tile" href="quiz.html">Quiz in same website</a>
+  <a class="tile" href="learn.html">Learn in same website</a>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+<script src="js/firebase.js"></script><script src="js/ui.js"></script><script src="js/cards.js"></script>
+<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js'); } requireAuth().then(()=>setActive('m-mission'));</script>
+</body></html>
