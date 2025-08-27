@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#e11d48">
+<link rel="icon" href="assets/icons/pwa-192.png">
+<link rel="stylesheet" href="css/global.css?v=10"><title>Quiz</title></head>
+<body>
+<header class="header"><a class="icon-btn" href="mission.html">←</a><h1 class="title">Quiz</h1><span class="icon-btn">❓</span></header>
+<main id="app" class="content"><div class="tile">Loading…</div></main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+<script src="js/firebase.js"></script><script src="js/ui.js"></script><script src="js/cards.js"></script><script src="js/quiz.js"></script>
+<script>requireAuth().then(()=> runQuiz(document.getElementById('app')));</script>
+</body></html>
